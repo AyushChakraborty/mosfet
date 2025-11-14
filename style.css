@@ -45,7 +45,7 @@ html {
     height: 100%;
     object-fit: cover;    
     object-position: center;   
-    filter: grayscale(30%) contrast(120%) brightness(90%);
+    filter: grayscale(0%) contrast(120%) brightness(90%);
     transform: translateY(0);
     transition: transform 0.1s ease-out;
 }
@@ -76,6 +76,34 @@ html {
     z-index: -2;
 }
 
+#wave-sound {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 5vh;
+    width: 5vh;
+    cursor: pointer;
+    transition: transform 0.4s ease, opacity 0.4s ease-in-out;
+}
+
+#wave-sound:hover {
+    transform: scale(1.1);
+}
+
+
+/* #wave-sound.adjust_pos {
+    top: -10px;
+} */
+
+#ship {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 5vh;
+    width: 5vh;
+    cursor: pointer;
+}
+
 .hero-content {
     display: flex;
     align-items: center;
@@ -85,21 +113,22 @@ html {
     z-index: 2;
     padding: 2rem;
     font-family: 'Courier New', monospace;
-    margin-top: -20vh;
+    margin-top: -40vh;
+    margin-left: 6vh;
 }
 
 .hero-border {
-    border: 4px solid #ffffff;
+    /* border: 4px solid #ffffff; */
     padding: 4rem 3rem;
     text-align: center;
-    background: rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(2px);
-    max-width: 1100px;
+    /* background: rgba(0, 0, 0, 0.3); */
+    /* backdrop-filter: blur(2px); */
+    max-width: 900px;
 }
 
 .hero-title {
     font-family: 'Courier New', monospace;
-    font-size: clamp(3rem, 8vw, 5rem);
+    font-size: clamp(1.75rem, 6vw, 3rem);
     font-weight: bold;
     margin-bottom: 2rem;
     color: #ffffff;
