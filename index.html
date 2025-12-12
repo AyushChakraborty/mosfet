@@ -1,88 +1,86 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ayush Chakraborty</title>
     <link rel="canonical" href="https://ayushch.foo">
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='50%' x='50%' text-anchor='middle' dominant-baseline='central' font-size='48'>⛵️</text></svg>">
-  </head>
-  <body>
-    
-
-    <section class="hero">
-      <img id="wave-sound" src="wave.png">
-
-      <img id="ship" src="sprite.png">
-
-      <div class="hero-image">
-        <img src="sail_2.jpg">
-      </div>
-
-      <div class="hero-overlay"></div>
-
-      <div class="hero-content">
-        <div class="hero-border">
-          <h1 class="hero-title">AYUSH CHAKRABORTY</p>
-          <div class="hero-nav">
-            <a href="" class="hero-nav-button">PROJECTS</a>
-            <a href="" class="hero-nav-button">BLOG</a>
-            <a href="" class="hero-nav-button">EXPERIENCE</a>
-            <a href="" class="hero-nav-button">CONTACT</a>
-          </div>
-          <a href="#about-panel" class="explore-button">EXPLORE</a>
+</head>
+<body>
+    <header>
+        <h1>Ayush Chakraborty</h1>
+        <div class="social-links">
+            <a href="https://github.com/ayush-chakraborty" target="_blank">GitHub</a>
+            <a href="https://linkedin.com/in/ayush-chakraborty" target="_blank">LinkedIn</a>
+            <a href="mailto:chakrabortyayush83@gmail.com">Email</a>
         </div>
-      </div>
+        
+        <p>
+            Hi! I'm Ayush. I'm studying Computer Science and Engineering at PES University, Bangalore, India.
+I'm passionate about <b>Machine Learning</b>, <b>Databases</b>, <b>Distributed systems</b> and <b>Computer Networks</b>. I also enjoy picking up new languages to learn, with my most recent endeavour being Go.
+This will be a space to document all the work I am doing, as well as some cool things I come across on the internet.
+        </p>
+        <p>
+            I am currently focused on <strong>Systems Programming (Rust/C++)</strong> and <strong>Database Internals</strong>.
+            I was previously a Research Intern at <a href="https://www.theinnovationlab.in/">The Innovation Lab</a>, where I worked on a subgraph search pipeline based on Graph Neural Networks.
+        </p>
+
+        <img id="ship" src="sprite.png" alt="pixel ship" title="Click me to sail!">
+    </header>
+
+    <section id="engineering">
+        <h2>Engineering & Projects</h2>
+        <ul class="project-list">
+            <li class="project-item">
+                <span class="project-title"><a href="https://github.com/AyushChakraborty/mergeDB">mergeDB</a></span> 
+                <span class="stack">[Rust, Tokio, CRDTs]</span>
+                <p>
+                    Building a distributed, eventually-consistent key-value store from scratch. 
+                    Implementing leaderless replication and conflict resolution using CRDTs (PNCounter, LWWSet) to handle network partitions.
+                </p>
+            </li>
+
+            <li class="project-item">
+                <span class="project-title"><a href="https://github.com/AyushChakraborty/huffzip">huffzip</a></span> 
+                <span class="stack">[C, huffman encoding]</span>
+                <p>
+                    A file compression CLI utility written in C. 
+                    Implements the Huffman coding algorithm for efficient lossless compression and features a custom Homebrew tap for distribution.
+               </p>
+            </li>
+
+            <li class="project-item">
+                <span class="project-title"><a href="https://github.com/AyushChakraborty/KeyStone">keystone</a></span> 
+                <span class="stack">[Python, Socket Programming]</span>
+                <p>
+                    A lightweight HTTP protocol implementation with support for html, json and text parsing.  
+                </p>
+            </li>
+        </ul>
     </section>
 
-    
-
-    <section id="about-panel" class="about">
-      <div class="container">
-
-        <div class="section-header">
-          <h2>ABOUT ME</h2>
-          <div class="divider">
-            <span>[###]</span>
-          </div>
-        </div>
-
-        <div class="about-content">
-          <div class="about-text">
-            <p class="lead">HELLO! WELCOME ABOARD MY DIGITAL SAIL</p>
-            <p>Hi, I'm Ayush. I'm studying <strong>Computer Science and Engineering</strong> at PES University, Bangalore, India.</p>
-            <p>I'm passionate about <strong>Machine Learning</strong>, <strong>Databases</strong>, <strong>Distributed systems</strong> and <strong>Computer Networks</strong>. I also enjoy picking up new languages to learn, with my most recent endeavour being Go.</p>
-            <p>This will be a space to document all the work I am doing, as well as some cool things I come across on the internet. So raise your sails and hoist your halyards, and let's sail! <a href="#references"><sup>[1]</sup></a></p>          
-          </div>
-          <div class="about-image">
-            <div class="photo-frame">
-              <img src="sail_2.jpg" alt="Ayush Chakraborty" class="skipper-photo">
-            </div>
-          </div>
-        </div>
-      </div>
+    <section id="learning">
+        <h2>Currently Learning / Reading</h2>
+        <ul>
+            <li>Reading: <a href="https://pages.cs.wisc.edu/~remzi/OSTEP/">OSTEP</a> (Operating Systems)</li>
+            <li>Reading: <strong>Database Internals</strong> (Alex Petrov)</li>
+            <li>Course: <a href="http://nil.csail.mit.edu/6.5840/2024/">MIT 6.5840 (Distributed Systems)</a></li>
+            <li>Building: <a href="https://build-your-own.org/redis/">Build Your Own Redis</a> (in Go)</li>
+        </ul>
     </section>
 
-    <section id="references">
-      <div class="reference-content">
-        <div class="reference-header"></div>
-        <p><a href="https://www.boat-ed.com/indiana/studyGuide/Parts-of-a-Sailboat/10101602_35129/">[1]: what do sail and halyard even mean?</a></p>
-      </div>
-    </section>
-
-
-
-
-    <section class="experience">
-      
-    </section>
-
+    <footer>
+        <p>
+            Updated: Dec 2025 <br>
+            <i>"The code is the documentation."</i>
+        </p>
+    </footer>
     <script src="index.js"></script>
-
-
-  </body>
+</body>
 </html>
