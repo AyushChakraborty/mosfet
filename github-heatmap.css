@@ -1,0 +1,97 @@
+.github-heatmap {
+  margin: 30px 0;
+  font-family: 'Courier Prime', 'Courier', monospace;
+}
+
+.heatmap-header {
+  margin-bottom: 15px;
+  font-size: 14px;
+  color: #666;
+}
+
+.total-contributions {
+  font-weight: 400;
+}
+
+.heatmap-grid {
+  position: relative;
+  display: inline-block;
+}
+
+.month-labels {
+  display: flex;
+  margin-bottom: 5px;
+  font-size: 11px;
+  color: #666;
+  position: relative;
+  height: 15px;
+}
+
+.month-labels span {
+  position: absolute;
+  font-size: 10px;
+}
+
+.heatmap-weeks {
+  display: flex;
+  gap: 3px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.week-column {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.contribution-day {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.contribution-day:hover {
+  outline: 2px solid rgba(255, 255, 255, 0.3);
+  outline-offset: 1px;
+  transform: scale(1.2);
+}
+
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 15px;
+  font-size: 11px;
+  color: #666;
+}
+
+.legend-colors {
+  display: flex;
+  gap: 3px;
+}
+
+.legend-box {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .heatmap-weeks {
+    max-width: 100%;
+  }
+  
+  .contribution-day {
+    width: 8px;
+    height: 8px;
+  }
+  
+  .legend-box {
+    width: 8px;
+    height: 8px;
+  }
+}
