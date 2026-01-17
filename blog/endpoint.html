@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Route Ordering in Express.js - Ayush Chakraborty</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        .blog-post {
+            max-width: 720px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        .back-link {
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .blog-post header {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .blog-post h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .blog-post time {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .blog-content {
+            line-height: 1.8;
+        }
+
+        .blog-content h2 {
+            font-size: 20px;
+            margin-top: 50px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-transform: none;
+            border: none;
+            padding: 0;
+            letter-spacing: 0;
+            color: #1a1a1a;
+        }
+
+        .blog-content h3 {
+            font-size: 18px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .blog-content p {
+            margin-bottom: 20px;
+        }
+
+        .blog-content code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 14px;
+            font-family: 'Courier Prime', monospace;
+        }
+
+        .blog-content pre {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 25px 0;
+            border: 1px solid #e0e0e0;
+        }
+
+        .blog-content pre code {
+            background: none;
+            padding: 0;
+        }
+
+        .blog-content img {
+            max-width: 100%;
+            height: auto;
+            margin: 30px 0;
+            border: 1px solid #eee;
+            border-radius: 4px;
+        }
+
+        .blog-content ul {
+            margin: 20px 0;
+            padding-left: 30px;
+        }
+
+        .blog-content li {
+            margin-bottom: 10px;
+        }
+
+        .blog-content strong {
+            font-weight: 700;
+        }
+
+        .blog-content blockquote {
+            border-left: 3px solid #ddd;
+            padding-left: 20px;
+            margin: 25px 0;
+            color: #666;
+            font-style: italic;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px dashed #ccc;
+            margin: 40px 0;
+        }
+    </style>
+</head>
+<body>
+    <article class="blog-post">
+        <header>
+            <a href="../index.html" class="back-link">← Back to home</a>
+            <h1>A subtle code placement bug that revealed an important detail about Backend frameworks</h1>
+            <time>January 17, 2026</time>
+        </header>
+        
+        <section class="blog-content">
+            <i>This blog is a collab by me and two of my friends: <a href="https://www.linkedin.com/in/r-shiva-naga-aditya-13014130a">Aditya</a> and <a href="https://www.rahulsenthilkumar.xyz/#home">Rahul</a>. This was written quite some time back, but I did not get a chance to post it until now. Enjoy :)</i>
+            <br><br>
+            <p>A Class booking application, using next.js and express.js. No seeming issues. Except one lurked by, waiting to be noticed. After signing in, a student couldn't see his class bookings. This hence led us to track the culprit and revealed a more fundamental code placement guideline to be followed in express.js and similar Backend frameworks.</p>
+
+            <p>The code had a simple Backend server using Express.JS. We had endpoints set up like this (in the main server.js file).</p>
+
+            <pre><code>// many more endpoints before this ...
+
+// endpoint of interest 
+app.get("tutors/available", (req, res) => {
+    // logic
+    // return a nested json with name and ID of every available tutor
+})
+
+//many more endpoints after ...</code></pre>
+
+            <p>Two things to keep in mind as a precursor. We had the <code>/tutors/:id</code> endpoint to get detail about a particular tutor in our app and the <code>tutors/available/</code> to get a list of all the available tutor's at a particular instant (we were managing the logic of a tutor being available and booked). There were many more endpoints, but these two are the pivotal characters of this story.</p>
+
+            <p>So, everything seems normal right? That's what we thought too. We did some testing using <a href="https://curl.se">Curl</a> here and there but nothing major (since we were just in the initial building stage) and did not catch anything then.</p>
+
+            <p>So we went ahead and integrated these endpoints into our Front end and tried working everything.</p>
+
+            <p>But we ran into an issue in our Front end, We wanted to display all the available tutors on a page on our Front end, so we made a call to our <code>tutors/available</code> endpoint. But we got a data format mismatch error (The data returned by our Backend and the data receiving and handling in out Front end were not in the same format). We tried different error handling, made sure the JSON format matched, etc. But nothing no fix to the Front end seemed to work.</p>
+
+            <p>Here is when we decided to curl the available endpoint again, and found this</p>
+
+            <img src="p1.jpeg" alt="Terminal output showing wrong endpoint response" />
+
+            <p>strange, this means that the response was for the wrong endpoint (<code>/tutors/:id</code>), but that couldn't be since we matched the expected request URL correctly and were getting an empty array.</p>
+
+            <p>We tried to scan the file line by line, checking for any possible discrepancy in logic, syntax, anything at all. Nothing, the code seemed to be syntactically correct and well structured (well, as we will learn soon, not really :( ).</p>
+
+            <p>Then as a last ditch resort, we decided to just move the handler that handles the available endpoint to the start of the file, just for ease, and decided to run curl to hit the same endpoint again.</p>
+
+            <pre><code>// /available endpoint at the very top now
+app.get("tutors/available", (req, res) => {
+    // logic
+    // return a nested json with name and ID of every available tutor
+})
+
+//.....more endpoints below</code></pre>
+
+            <img src="p2.jpeg" alt="Terminal output showing correct endpoint response" />
+
+            <p>WHAT. It hit the correct endpoint now! How could it be, how could just moving the handler to the very top fix the issue. Was this another one of JS's "special", runtime behaviour?</p>
+
+            <img src="p3.jpeg" alt="Confused reaction" />
+
+            <p>To be absolutely sure, we got the handler to exactly where it was before, and hit the /available endpoint again, again the old wrong response.</p>
+
+            <p>Strange, we banged our heads a bit, and after some thinking used the most potent debugging tool out there. The one senior devs pull out after nothing else works, leaving all the junior devs in awe. Yes that's right, print debugging!</p>
+
+            <p>We console logged some message for each of the endpoints to be sure as to which endpoint was being hit instead of the intended /available. Then we hit the endpoint again, and found our culprit</p>
+
+            <pre><code>// the culprit
+app.get("/tutors/:id", (req, res) => {
+    console.log("/:id here");
+    const user_id = req.params.id;
+    //logic
+    // returns a json with tutor details
+})</code></pre>
+
+            <p>This seemed off, why would this endpoint be hit out of all the possible endpoints. But a few things were clear by this. One that express wrongly captured <code>/:id</code> endpoint instead of the intended <code>/available</code> endpoint which occurred way later in the file, and second that the form of both the endpoints were the same,</p>
+
+            <pre><code>//both had `/tutor/something` form</code></pre>
+
+            <p>So now we had it pin pointed. Express indeed wrongly captured /:id because of the their forms being the same.</p>
+
+            <p>To be absolutely sure, we wrote another dummy endpoint with the same form, and place it before /:id, in the hopes that if this was indeed the behaviour that express was doing, it should capture this dummy endpoint first now.</p>
+
+            <pre><code>// dummy endpoint
+app.get("/tutors/:dummy_id", (req, res) => {
+    console.log("/:dummy_id here");
+    const user_id = req.params.dummy_id;
+    res.status(200).json({"res" : user_id});
+})
+
+app.get("/tutors/:id", (req, res) => {
+    console.log("/:id here");
+    const user_id = req.params.id;
+    //logic
+    // returns a json with tutor details
+})
+
+// endpoint of interest 
+app.get("tutors/available", (req, res) => {
+    // logic
+    // return a nested json with name and ID of every available tutor
+})</code></pre>
+
+            <img src="p4.jpeg" alt="Terminal showing dummy endpoint being hit" />
+
+            <p>Sure enough, it now hit the new dummy endpoint now. Interesting.</p>
+
+            <p>After some more looking and thinking, we realised that we had <strong>placed dynamic endpoints above the static ones</strong>. For some context, dynamic endpoints refer to endpoints having some information passed by the user as a part of the endpoint. In this case, <code>/:id</code> was dynamic since the id could be anything and depended on the end user. But, <code>/available</code> was a static endpoint, since the endpoint is always called <code>/available</code>, nothing else about it can change.</p>
+
+            <p>We then surfed the web to realise that:</p>
+
+            <h3>express captures dynamic endpoints of the same type first when trying to hit any endpoint of the same type.</h3>
+
+            <p>Ah! that explains this issue. When we were trying to hit <code>/available</code>, express went through the endpoints sequentially, and hit <code>/:id</code> which was the same form as /available, it got captured first. This is because express sees :id as a wildcard and sees that available is a match for this wildcard and sets available, the literal string "available" to be the value of id and executes that endpoint logic.</p>
+
+            <hr>
+
+            <h2>How other Backend frameworks handle this</h2>
+
+            <p>This was particularly interesting since other Backend frameworks we worked with like Spring(Java) or Gin(Go), did not have such peculiarities. In Gin, when our app start, a <a href="https://ankitpandeycu.medium.com/unleashing-the-potential-of-radix-tree-35e6c5d3b49d">Radix Tree</a> is built under the hood which automatically prioritizes static routes over dynamic ones.</p>
+
+            <p>So say for these 2 routes,</p>
+
+            <pre><code>"/tutors/:id"
+"/tutors/available"</code></pre>
+
+            <p><strong>Gin</strong> would build the tree something like this,</p>
+
+            <pre><code>(root)
+    -/tutors    -> out static segment
+        -/available    static segment (high priority, checked first)
+        -/:id    -> static segment (low priority, checked second)</code></pre>
+
+            <img src="p5.jpeg" alt="Radix tree diagram" />
+
+            <p>Let's test this out, we'll recreate the endpoints in a simple Gin Server and call our Backned functions to see what responses we get.</p>
+
+            <pre><code>package main
+
+import (
+    "github.com/gin-gonic/gin"
+)
+
+func main(){
+
+    r := gin.Default()
+
+    r.GET("/tutors/:id", func(c* gin.Context){
+        c.String(201,"calling /tutors/:id")
+    })
+
+    r.GET("/tutors/available", func(c* gin.Context){
+        c.String(201,"calling /tutors/available")
+    })
+
+    r.Run(":8000")
+}</code></pre>
+
+            <p>Since we have placed the dynamic route (<code>/tutors/:id</code>) before the static route (<code>/tutors/available</code>), based on what we are talking about, trying to make a call to <code>/tutots/available</code> should be intercepted by <code>/tutors/:id</code>, taking "available" as the ":id" its expecting. But when see that Gin handles this safely.</p>
+
+            <img src="p6.jpeg" alt="Gin framework handling routes correctly" />
+
+            <p>Since the static segment is given higher priority when compared to our dynamic one, the request URL is first compared to the static endpoint before the dynamic one.</p>
+
+            <p>Now trying the same thing with our a Express.JS server, building the same endpoints in the same order as above.</p>
+
+            <pre><code>const express = require("express")
+const app = express()
+
+app.get("/tutors/:id", (req, res) => {
+  res.send("tutors/:id has been called")
+})
+
+app.get("tutors/available", (req, res) => {
+  res.send("tutors/available has been called")
+})
+
+app.listen(8000, (e) => {
+  if(!e) console.log("server running on :8000")
+  else console.log("error starting server")
+})</code></pre>
+
+            <p>Now when we try calling the endpoints using Curl, we observe this,</p>
+
+            <img src="p7.jpeg" alt="Express.js route matching behavior" />
+
+            <p>We see that since Express.JS follows a sequential order for comparing the incoming request with the existing endpoints, first <code>/tutors/123</code> is compared with <code>/tutots/:id</code> and it works as we expect it to.</p>
+
+            <p>But when we call <code>/tutors/available</code>, it gets compared to <code>/tutors/:id</code> first and is again matched taking the string "available" to be the :id param that the function is expecting. Hence we see the above output.</p>
+
+            <p>Similarly in spring, specificity scores are used to rank the endpoints.</p>
+
+            <p>When the spring application starts, it analyses all defined annotations of @RequestMapping, @PostMapping, @GetMapping, etc, and assigns static endpoints a higher specificity score than dynamic endpoints. So the code below works perfectly fine, resulting in perfect <code>tutors/available</code> hit.</p>
+
+            <p>Spring uses a specificity comparator to choose the best match when multiple mapping fit, for each mapping example @GetMapping it build a requestMappingInfo with http method, pattern and parameters.</p>
+
+            <pre><code>@RestController
+@RequestMapping("/tutors")
+public class ItemController {
+
+    @GetMapping("/{id}")
+    public String getClassById(@PathVariable String id) {
+        //this will only be hit for requests like /items/1, /items/2, etc.,
+        //but not for /items/available, even though it is defined above
+        ///available endpoint
+        return "fetching item with ID: " + id;
+    }
+    
+    @GetMapping("/available")
+    public String getAvailableClasses() {
+        //this will be hit for a request to /items/available only
+        return "showing available classes";
+    }
+}</code></pre>
+
+            <p>The same behaviour can also be seen with the .NET framework.</p>
+
+            <p>But this is not the case with fastAPI, the popular backend framework for python. It handles it in a similar way to express, where the order of the endpoint definitions matter.</p>
+
+            <pre><code>from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/tutors/{id}")
+def get_id(id: str):
+    return {"/tutors/{id} has been called}
+
+@app.get("/tutors/available")
+def get_classes():
+    #this route will never be reached because the one above matches first
+    return {"/tutors/available called"}</code></pre>
+
+            <img src="p8.jpeg" alt="FastAPI route ordering behavior" />
+
+            <p>So, lesson learnt. Have to be specially careful when dealing with python and Js, or honestly, they should just have been better in the first place (Go Java!) 😉</p>
+
+            <ul>
+                <li><strong>Express (Js) & FastAPI (Python)</strong>
+                    <ul>
+                        <li>Route matching is <strong>order-based</strong>.</li>
+                        <li>Dynamic routes (<code>/tutors/:id</code> or <code>/tutors/{id}</code>) can capture requests that were meant for static ones (<code>/tutors/available</code>) if defined first.</li>
+                        <li>Hence define static routes before dynamic ones for the same prefix.</li>
+                    </ul>
+                </li>
+                <li><strong>Gin (Go)</strong>
+                    <ul>
+                        <li>Gin builds a <strong>radix tree</strong> of all the routes.</li>
+                        <li>This gives <strong>static segments higher priority</strong> over dynamic ones.</li>
+                        <li><code>/tutors/available</code> will be checked first, over <code>/tutors/:id</code> even if defined later.</li>
+                    </ul>
+                </li>
+                <li><strong>Spring (Java)</strong>
+                    <ul>
+                        <li>Computes <strong>specificity scores</strong>. (<code>/tutors/available</code> is more specific than <code>/tutors/:id)</code>.</li>
+                        <li>Chooses the most specific match, again ignoring definition order.</li>
+                        <li><code>/tutors/available</code> beats <code>/tutors/:id</code> for that URL.</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <hr>
+
+            <h2>Conclusion</h2>
+
+            <p>In frameworks like Express and FastAPI, route matching depends on the order in which routes are defined—so incorrect placement can lead to incorrect behaviour. In contrast, routers in Gin and Spring automatically prioritize static paths over dynamic ones, allowing developers to think in terms of endpoint semantics rather than declaration order.</p>
+
+            <hr>
+        </section>
+    </article>
+</body>
+</html>
