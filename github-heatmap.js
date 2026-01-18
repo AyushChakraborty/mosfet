@@ -1,4 +1,3 @@
-
 class GitHubHeatmap {
   constructor(username, containerId, token = null) {
     this.username = username;
@@ -22,6 +21,12 @@ class GitHubHeatmap {
               }
             }
           }
+          repositories(first: 1, orderBy: {field: PUSHED_AT, direction: DESC}, ownerAffiliations: OWNER) {
+            nodes {
+              name
+              pushedAt
+            }
+          }
         }
       }
     `;
@@ -30,7 +35,6 @@ class GitHubHeatmap {
       'Content-Type': 'application/json',
     };
 
-    // Add authorization header if token is provided
     if (this.token) {
       headers['Authorization'] = `Bearer ${this.token}`;
     }
@@ -52,42 +56,61 @@ class GitHubHeatmap {
         return null;
       }
 
-      return data.data.user.contributionsCollection.contributionCalendar;
+      return {
+        calendar: data.data.user.contributionsCollection.contributionCalendar,
+        latestRepo: data.data.user.repositories.nodes[0]
+      };
     } catch (error) {
       console.error('Error fetching GitHub data:', error);
       return null;
     }
   }
 
-  // Get color intensity based on contribution count
+  getTimeAgo(dateString) {
+    const now = new Date();
+    const past = new Date(dateString);
+    const diffInMs = now - past;
+    const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
+    const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+
+    if (diffInHours < 1) return 'just now';
+    if (diffInHours < 24) return `${diffInHours}h ago`;
+    if (diffInDays < 7) return `${diffInDays}d ago`;
+    if (diffInDays < 30) return `${Math.floor(diffInDays / 7)}w ago`;
+    return `${Math.floor(diffInDays / 30)}mo ago`;
+  }
+
   getColorIntensity(count, maxCount) {
-    if (count === 0) return '#ebedf0'; // Light gray for no contributions
+    if (count === 0) return '#ebedf0'; 
     
-    // Calculate intensity percentage (0 to 1)
-    const intensity = Math.min(count / maxCount, 1);
+    // Use square root to make lower values more visible
+    const intensity = Math.min(Math.sqrt(count / maxCount), 1);
     
-    // Single green shade with varying opacity/brightness
-    // Base green color: #39d353
+    const minIntensity = 0.4;     //min opacity for any contribution
+    const adjustedIntensity = minIntensity + (intensity * (1 - minIntensity));
+    
     const baseColor = { r: 57, g: 211, b: 83 };
     
-    // Interpolate between light green and full green
-    const r = Math.round(235 + (baseColor.r - 235) * intensity);
-    const g = Math.round(237 + (baseColor.g - 237) * intensity);
-    const b = Math.round(240 + (baseColor.b - 240) * intensity);
+    const r = Math.round(235 + (baseColor.r - 235) * adjustedIntensity);
+    const g = Math.round(237 + (baseColor.g - 237) * adjustedIntensity);
+    const b = Math.round(240 + (baseColor.b - 240) * adjustedIntensity);
     
     return `rgb(${r}, ${g}, ${b})`;
   }
 
-  // Render the heatmap
+
   async render() {
-    const calendar = await this.fetchContributions();
+    const data = await this.fetchContributions();
     
-    if (!calendar) {
+    if (!data) {
       this.container.innerHTML = '<p>Failed to load GitHub activity</p>';
       return;
     }
 
-    // Find max contribution count for color scaling
+    const calendar = data.calendar;
+    const latestRepo = data.latestRepo;
+    const timeAgo = latestRepo ? this.getTimeAgo(latestRepo.pushedAt) : null;
+
     let maxCount = 0;
     calendar.weeks.forEach(week => {
       week.contributionDays.forEach(day => {
@@ -97,7 +120,6 @@ class GitHubHeatmap {
       });
     });
 
-    // Create heatmap HTML
     const heatmapHTML = `
       <div class="github-heatmap">
         <div class="heatmap-header">
@@ -113,20 +135,25 @@ class GitHubHeatmap {
           <span>Less</span>
           <div class="legend-colors">
             <span class="legend-box" style="background-color: #ebedf0"></span>
-            <span class="legend-box" style="background-color: rgb(177, 227, 186)"></span>
-            <span class="legend-box" style="background-color: rgb(134, 224, 161)"></span>
-            <span class="legend-box" style="background-color: rgb(91, 219, 137)"></span>
+            <span class="legend-box" style="background-color: rgb(146, 224, 162)"></span>
+            <span class="legend-box" style="background-color: rgb(105, 220, 143)"></span>
+            <span class="legend-box" style="background-color: rgb(77, 216, 115)"></span>
             <span class="legend-box" style="background-color: rgb(57, 211, 83)"></span>
           </div>
           <span>More</span>
         </div>
+        ${latestRepo ? `
+          <div class="latest-commit">
+            <span class="pulse-dot"></span>
+            <span class="commit-text">Pushed to <strong>${latestRepo.name}</strong> ${timeAgo}</span>
+          </div>
+        ` : ''}
       </div>
     `;
 
     this.container.innerHTML = heatmapHTML;
   }
 
-  // Render month labels
   renderMonthLabels(weeks) {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
                     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -148,7 +175,6 @@ class GitHubHeatmap {
     return monthLabels;
   }
 
-  // Render a week column
   renderWeek(week, maxCount) {
     const days = week.contributionDays.map(day => {
       const color = this.getColorIntensity(day.contributionCount, maxCount);
@@ -166,3 +192,4 @@ class GitHubHeatmap {
     return `<div class="week-column">${days}</div>`;
   }
 }
+
