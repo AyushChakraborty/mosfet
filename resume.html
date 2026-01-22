@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume - Ayush Chakraborty</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Courier Prime', 'Courier New', monospace;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+
+        .resume-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .back-link {
+            font-size: 14px;
+            text-decoration: none;
+            color: #666;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: #000;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+
+        .download-btn:hover {
+            background: #333;
+        }
+
+        .resume-content {
+            font-size: 14px;
+        }
+
+        .resume-content h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .contact-info {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 13px;
+        }
+
+        .contact-info a {
+            color: #666;
+            text-decoration: none;
+        }
+
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+
+        .resume-section {
+            margin-bottom: 35px;
+        }
+
+        .resume-section h2 {
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-bottom: 2px solid #000;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .resume-item {
+            margin-bottom: 25px;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 5px;
+        }
+
+        .item-title {
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .item-date {
+            color: #666;
+            font-size: 13px;
+            font-style: italic;
+        }
+
+        .item-subtitle {
+            color: #666;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .item-description {
+            margin-left: 0;
+            padding-left: 0;
+        }
+
+        .item-description li {
+            margin-bottom: 8px;
+            list-style-position: outside;
+            margin-left: 20px;
+        }
+
+        .skills-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .skill-category {
+            display: flex;
+            gap: 10px;
+        }
+
+        .skill-label {
+            font-weight: 700;
+            min-width: 120px;
+        }
+
+        .skill-items {
+            color: #333;
+        }
+
+        .gpa {
+            font-weight: 600;
+        }
+
+        .coursework {
+            color: #666;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        strong {
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="resume-header">
+        <a href="../index.html" class="back-link">← Back to home</a>
+        <a href="Ayush_Chakraborty_CV.pdf" download class="download-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+            </svg>
+            Download PDF
+        </a>
+    </div>
+
+    <div class="resume-content">
+        <h1>Ayush Chakraborty</h1>
+        <div class="contact-info">
+            <a href="mailto:chakrabortyayush83@gmail.com">chakrabortyayush83@gmail.com</a> • 
+            <a href="https://github.com/AyushChakraborty" target="_blank">ayush-chakraborty</a> • 
+            <a href="https://www.linkedin.com/in/ayushch83" target="_blank">LinkedIn</a><br>
+            Bangalore, India
+        </div>
+
+        <div class="resume-section">
+            <h2>Education</h2>
+            <div class="resume-item">
+                <div class="item-header">
+                    <span class="item-title">Bachelor of Technology in Computer Science and Engineering</span>
+                    <span class="item-date">Expected May 2027</span>
+                </div>
+                <div class="item-subtitle">PES University, Bangalore</div>
+                <div class="gpa">CGPA: 9.28 / 10.0 (Top 5% of batch)</div>
+                <div class="coursework">
+                    <strong>Relevant Coursework:</strong> Machine Learning, Database Management System, Big Data, Software Engineering, Computer Networks, Operating Systems
+                </div>
+            </div>
+        </div>
+
+        <div class="resume-section">
+            <h2>Experience</h2>
+            <div class="resume-item">
+                <div class="item-header">
+                    <span class="item-title">Research Intern — The Innovation Lab, PES University</span>
+                    <span class="item-date">June 2025 – August 2025</span>
+                </div>
+                <div class="item-subtitle">Selected as 1 of 26 interns from 1000+ applicants.</div>
+                <ul class="item-description">
+                    <li>Co-developed SUBGNN with 3 research interns: a scalable subgraph isomorphism framework that accelerates search on large-scale graphs via a filter-and-verify architecture.</li>
+                    <li>Designed a multi-stage pipeline using METIS for graph partitioning and Graph Neural Networks (GNNs) to generate topology-aware vector embeddings for efficient candidate filtering.</li>
+                    <li>Built the retrieval stage using FAISS to prune the search space, achieving an 82.5% mean speedup (on CORA) and 91.18% node mapping accuracy (on OGBN-Arxiv, 170k nodes) compared to traditional solvers.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="resume-section">
+            <h2>Projects</h2>
+            
+            <div class="resume-item">
+                <div class="item-header">
+                    <span class="item-title">Transformer Model & C Serving Layer — C, PyTorch, Python</span>
+                    <span class="item-date">Dec 2024 – March 2025</span>
+                </div>
+                <ul class="item-description">
+                    <li>Implemented a decoder-only Transformer architecture from first principles in PyTorch, incorporating multi-head self-attention and positional embeddings to perform autoregressive language modeling.</li>
+                    <li>Built a C serving layer to execute the Python inference process via standard I/O streams and achieved real-time token streaming by manipulating standard I/O buffers to pipe generated tokens immediately to the client, replicating the user experience of production LLMs.</li>
+                </ul>
+            </div>
+
+            <div class="resume-item">
+                <div class="item-header">
+                    <span class="item-title">CRDT-Based Distributed Key-Value Store — Rust, CRDTs, Tokio</span>
+                    <span class="item-date">Sep 2025 – Present</span>
+                </div>
+                <ul class="item-description">
+                    <li>Co-developed a leaderless, eventually consistent key-value store in Rust, leveraging Conflict-free Replicated Data Types (CRDTs) to enable mathematically verifiable convergence without central coordination.</li>
+                    <li>Built an asynchronous P2P gossip protocol for highly concurrent node-to-node state synchronization and anti-entropy mechanisms.</li>
+                </ul>
+            </div>
+
+            <div class="resume-item">
+                <div class="item-header">
+                    <span class="item-title">Redis-like In-Memory Store — C++, TCP Sockets, Event Loop</span>
+                    <span class="item-date">Oct 2025 – Present</span>
+                </div>
+                <ul class="item-description">
+                    <li>Built a single-threaded, event-driven server using non-blocking I/O to handle concurrent clients without context-switching overhead.</li>
+                    <li>Implemented a custom chained hash table for O(1) lookups and the RESP serialization protocol to manage efficient binary data transmission.</li>
+                </ul>
+            </div>
+
+            <div class="resume-item">
+                <div class="item-header">
+                    <span class="item-title">Distributed Systems Implementation (MIT 6.824 Labs) — Go, RPC, Concurrency</span>
+                    <span class="item-date">Nov 2025 – Jan 2026</span>
+                </div>
+                <ul class="item-description">
+                    <li>Built a fault-tolerant MapReduce system handling worker failures and stragglers via a custom RPC coordinator.</li>
+                    <li>Developed a Raft consensus module to guarantee strong consistency across sharded key-value pairs, implementing leader election and log replication.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="resume-section">
+            <h2>Technical Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <span class="skill-label">Languages:</span>
+                    <span class="skill-items">C++, C, Rust, Python, Go</span>
+                </div>
+                <div class="skill-category">
+                    <span class="skill-label">Technologies:</span>
+                    <span class="skill-items">PyTorch, Docker, Tokio, Redis, FAISS, Git, Linux/Bash, MySQL, MongoDB, LaTeX</span>
+                </div>
+                <div class="skill-category">
+                    <span class="skill-label">Certifications:</span>
+                    <span class="skill-items">Deep Learning Specialization, Machine Learning Specialization (DeepLearning.AI)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="resume-section">
+            <h2>Honors & Awards</h2>
+            <ul class="item-description">
+                <li><strong>Prof. MRD Merit Scholarship:</strong> Awarded consecutively (Sem 1–4) for maintaining rank in the top 5% of the batch.</li>
+                <li><strong>State Merit Scholar:</strong> Ranked 1437 out of 200,000+ candidates (Top 0.7%) in the State Engineering Entrance Exam (KCET).</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
