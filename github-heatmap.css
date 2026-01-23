@@ -14,8 +14,10 @@
 }
 
 .heatmap-grid {
+  display: block; 
+  width: 100%;
+  overflow-x: auto;
   position: relative;
-  display: inline-block;
 }
 
 .month-labels {
@@ -35,7 +37,6 @@
 .heatmap-weeks {
   display: flex;
   gap: 3px;
-  overflow-x: auto;
   padding-bottom: 10px;
 }
 
@@ -43,6 +44,7 @@
   display: flex;
   flex-direction: column;
   gap: 3px;
+  flex-shrink: 0;
 }
 
 .contribution-day {
