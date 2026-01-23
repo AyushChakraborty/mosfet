@@ -1,8 +1,8 @@
 :root {
-        --bg-color: #ffffff;
-        --text-color: #1a1a1a;
-        --meta-color: #666;
-        --highlight-color: #ffff00;
+    --bg-color: #ffffff;
+    --text-color: #1a1a1a;
+    --meta-color: #666;
+    --highlight-color: #ffff00;
 }
 
 * {
@@ -25,6 +25,7 @@ body {
 }
 
 header {
+    position: relative;
     margin-bottom: 40px;
 }
 
@@ -33,6 +34,7 @@ header {
     align-items: center;
     gap: 20px;
     margin-bottom: 20px;
+    flex-wrap: wrap;
 }
 
 .profile-pic {
@@ -64,9 +66,38 @@ h1 {
     object-position: center;
 }
 
-/* Optional: Add overlay effect */
 .hero-banner {
     position: relative;
+}
+
+.hanko-seal {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    border: 3px solid #e05555;
+    
+    box-shadow: 0 0 2px #e05555, inset 0 0 2px #e05555;
+    
+    color: #e05555;
+    background-color: transparent;
+    
+    font-family: 'Courier Prime', monospace;
+    font-weight: 700;
+    font-size: 13px;
+    
+    transform: rotate(-15deg);
+    opacity: 0.8;
+    cursor: default;
+    user-select: none;
 }
 
 .social-links {
@@ -168,44 +199,6 @@ li.project-item {
     position: relative; 
     z-index: 10;
 }
-
-/* .blog-list {
-    list-style: none;
-}
-
-.blog-item {
-    margin-bottom: 20px;
-    border-bottom: 1px dashed #eee;
-    padding-bottom: 15px;
-}
-
-.blog-item:last-child {
-    border-bottom: none;
-}
-
-.blog-link {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    text-decoration: none;
-    gap: 20px;
-}
-
-.blog-link:hover {
-    background-color: var(--highlight-color);
-}
-
-.blog-title {
-    flex: 1;
-    font-weight: 500;
-}
-
-.blog-date {
-    font-size: 13px;
-    color: var(--meta-color);
-    font-style: italic;
-    white-space: nowrap;
-} */
 
 .blog-grid {
     display: grid;

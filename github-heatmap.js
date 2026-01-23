@@ -21,8 +21,11 @@ class GitHubHeatmap {
               }
             }
           }
-          repositories(first: 1, orderBy: {field: PUSHED_AT, direction: DESC}, ownerAffiliations: OWNER) {
+          repositories(first: 1, orderBy: {field: PUSHED_AT, direction: DESC}, ownerAffiliations: [OWNER, ORGANIZATION_MEMBER, COLLABORATOR]) {
             nodes {
+              owner {
+                login
+              }
               name
               pushedAt
             }
@@ -109,6 +112,9 @@ class GitHubHeatmap {
 
     const calendar = data.calendar;
     const latestRepo = data.latestRepo;
+    const repoName = latestRepo.owner ? 
+        `${latestRepo.owner.login}/${latestRepo.name}` : 
+        latestRepo.name;
     const timeAgo = latestRepo ? this.getTimeAgo(latestRepo.pushedAt) : null;
 
     let maxCount = 0;
@@ -145,7 +151,7 @@ class GitHubHeatmap {
         ${latestRepo ? `
           <div class="latest-commit">
             <span class="pulse-dot"></span>
-            <span class="commit-text">Pushed to <strong>${latestRepo.name}</strong> ${timeAgo}</span>
+            <span class="commit-text">Pushed to <strong>${repoName}</strong> ${timeAgo}</span>
           </div>
         ` : ''}
       </div>
