@@ -21,11 +21,16 @@ class GitHubHeatmap {
               }
             }
           }
-          repositories(first: 1, orderBy: {field: PUSHED_AT, direction: DESC}, ownerAffiliations: [OWNER, ORGANIZATION_MEMBER, COLLABORATOR]) {
+          repositories(first: 1, orderBy: {field: PUSHED_AT, direction: DESC}, ownerAffiliations: [OWNER], isFork: false) {
             nodes {
-              owner {
-                login
-              }
+              owner { login }
+              name
+              pushedAt
+            }
+          }
+          repositoriesContributedTo(first: 1, orderBy: {field: PUSHED_AT, direction: DESC}, contributionTypes: [COMMIT], includeUserRepositories: true) {
+            nodes {
+              owner { login }
               name
               pushedAt
             }
@@ -34,22 +39,14 @@ class GitHubHeatmap {
       }
     `;
 
-    const headers = {
-      'Content-Type': 'application/json',
-    };
-
-    if (this.token) {
-      headers['Authorization'] = `Bearer ${this.token}`;
-    }
+    const headers = { 'Content-Type': 'application/json' };
+    if (this.token) headers['Authorization'] = `Bearer ${this.token}`;
 
     try {
       const response = await fetch('https://api.github.com/graphql', {
         method: 'POST',
         headers: headers,
-        body: JSON.stringify({
-          query: query,
-          variables: { username: this.username }
-        })
+        body: JSON.stringify({ query: query, variables: { username: this.username } })
       });
 
       const data = await response.json();
@@ -61,12 +58,74 @@ class GitHubHeatmap {
 
       return {
         calendar: data.data.user.contributionsCollection.contributionCalendar,
-        latestRepo: data.data.user.repositories.nodes[0]
+        latestOwn: data.data.user.repositories.nodes[0],
+        latestContrib: data.data.user.repositoriesContributedTo.nodes[0]
       };
     } catch (error) {
       console.error('Error fetching GitHub data:', error);
       return null;
     }
+  }
+
+  async render() {
+    const data = await this.fetchContributions();
+    
+    if (!data) {
+      this.container.innerHTML = '<p>Failed to load GitHub activity</p>';
+      return;
+    }
+
+    const calendar = data.calendar;
+
+    const ownDate = data.latestOwn ? new Date(data.latestOwn.pushedAt) : new Date(0);
+    const contribDate = data.latestContrib ? new Date(data.latestContrib.pushedAt) : new Date(0);
+    
+    const latestRepo = ownDate > contribDate ? data.latestOwn : data.latestContrib;
+
+    const repoName = latestRepo ? 
+        `${latestRepo.owner.login}/${latestRepo.name}` : 
+        '';
+    const timeAgo = latestRepo ? this.getTimeAgo(latestRepo.pushedAt) : null;
+
+    let maxCount = 0;
+    calendar.weeks.forEach(week => {
+      week.contributionDays.forEach(day => {
+        if (day.contributionCount > maxCount) maxCount = day.contributionCount;
+      });
+    });
+
+    const heatmapHTML = `
+      <div class="github-heatmap">
+        <div class="heatmap-header">
+          <span class="total-contributions">${calendar.totalContributions} contributions in the last year</span>
+        </div>
+        <div class="heatmap-grid">
+          ${this.renderMonthLabels(calendar.weeks)}
+          <div class="heatmap-weeks">
+            ${calendar.weeks.map(week => this.renderWeek(week, maxCount)).join('')}
+          </div>
+        </div>
+        <div class="heatmap-legend">
+          <span>Less</span>
+          <div class="legend-colors">
+            <span class="legend-box" style="background-color: #ebedf0"></span>
+            <span class="legend-box" style="background-color: rgb(146, 224, 162)"></span>
+            <span class="legend-box" style="background-color: rgb(105, 220, 143)"></span>
+            <span class="legend-box" style="background-color: rgb(77, 216, 115)"></span>
+            <span class="legend-box" style="background-color: rgb(57, 211, 83)"></span>
+          </div>
+          <span>More</span>
+        </div>
+        ${latestRepo ? `
+          <div class="latest-commit">
+            <span class="pulse-dot"></span>
+            <span class="commit-text">Pushed to <strong>${repoName}</strong> ${timeAgo}</span>
+          </div>
+        ` : ''}
+      </div>
+    `;
+
+    this.container.innerHTML = heatmapHTML;
   }
 
   getTimeAgo(dateString) {
@@ -111,7 +170,9 @@ class GitHubHeatmap {
     }
 
     const calendar = data.calendar;
-    const latestRepo = data.latestRepo;
+    const ownDate = data.latestOwn ? new Date(data.latestOwn.pushedAt) : new Date(0);
+    const contribDate = data.latestContrib ? new Date(data.latestContrib.pushedAt) : new Date(0);
+    const latestRepo = ownDate > contribDate ? data.latestOwn : data.latestContrib;
     const repoName = latestRepo.owner ? 
         `${latestRepo.owner.login}/${latestRepo.name}` : 
         latestRepo.name;
