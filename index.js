@@ -23,6 +23,17 @@ window.addEventListener('mousemove', (e) => {
     }
 });
 
+document.getElementById('continue-btn').addEventListener('click', function() {
+    const overlay = document.getElementById('mobile-warning');
+    
+    overlay.style.transition = 'opacity 0.5s ease';
+    overlay.style.opacity = '0';
+    
+    setTimeout(() => {
+        overlay.style.display = 'none';
+    }, 500);
+});
+
 // Click to toggle movement
 shipImage.addEventListener('click', () => {
     if (!move) {

@@ -11,6 +11,73 @@
     box-sizing: border-box;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Playfair+Display:ital,wght@1,400;1,700&display=swap');
+
+.cinematic-overlay {
+    position: fixed;
+    inset: 0; 
+    background-color: #ff0000; 
+    z-index: 9999;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    
+    overflow: hidden; 
+    padding: 10px; 
+    box-sizing: border-box;
+    
+    display: none; 
+}
+
+.big-text {
+    font-family: 'Anton', sans-serif;
+    font-size: 15vmin; 
+    line-height: 0.85;
+    color: #ffffff;
+    text-transform: uppercase;
+    margin: 0;
+    letter-spacing: -1px;
+    transform: scaleY(1.2); 
+    text-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.script-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 6vmin; 
+    color: #ffffff;
+    margin: 1.5vh 0; 
+    font-weight: 400;
+    opacity: 0.9;
+}
+
+.cinematic-btn {
+    margin-top: 5vh; 
+    background: transparent;
+    border: 2px solid #ffffff;
+    color: #ffffff;
+    font-family: 'Anton', sans-serif;
+    font-size: 1rem; 
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    padding: 15px 30px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    
+    flex-shrink: 0; 
+}
+
+@media screen and (max-width: 768px) {
+    .cinematic-overlay {
+        display: flex;
+    }
+}
+
 body {
     font-family: 'Courier Prime', 'Courier New', monospace;
     font-size: 15px;
@@ -253,6 +320,7 @@ li.project-item {
     font-family: monospace;
     transition: all 0.3s ease; 
     z-index: 1000;
+    overflow: auto;
 }
 
 .log-entry, .input-line {
@@ -274,6 +342,21 @@ li.project-item {
     color: #a5b6cf; 
     text-shadow: 0 0 5px #a5b6cf, 0 0 10px #a5b6cf;
     word-break: break-all; 
+    white-space: pre-wrap;
+}
+
+.log-entry {
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-start;
+    margin-bottom: 4px;
+    width: 100%;
+}
+
+.cmd-line {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 #cmd-input {
@@ -295,9 +378,10 @@ li.project-item {
 }
 
 .minimise {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+    position: sticky;
+    top: 0;
+    margin-left: auto;
+    z-index: 10;
     width: 12px;   
     height: 12px;
     border-radius: 50%;
@@ -306,6 +390,7 @@ li.project-item {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-bottom: 10px;
 }
 
 .minimise::after {
@@ -370,17 +455,8 @@ li.project-item {
     clip-path: polygon(100% 100%, 100% 0, 0 100%);
 }
 
-#cmd-input {
-    background: transparent;
-    border: none;
-    outline: none;
-    color: inherit;
-    font-family: inherit;
-    flex-grow: 1;
-}
-
 /* Only show the terminal on screens larger than 1024px */
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 768px) {
     .terminal-window {
         display: none !important;
     }
