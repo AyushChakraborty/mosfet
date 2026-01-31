@@ -239,6 +239,153 @@ li.project-item {
     margin: 0;
 }
 
+.terminal-window {
+    position: fixed; 
+    bottom: 20px;
+    right: 20px;
+    width: 97%;
+    height: 45%;
+    background-color: #1a1b26; 
+    border-radius: 10px;
+    box-sizing: border-box;
+    padding: 20px; 
+    color: #fff;
+    font-family: monospace;
+    transition: all 0.3s ease; 
+    z-index: 1000;
+}
+
+.log-entry, .input-line {
+    display: flex;
+    align-items: center; 
+    margin-bottom: 4px;  
+    font-family: monospace; 
+    width: 100%;
+}
+
+.prompt {
+    color: #4af626; 
+    text-shadow: 0 0 5px #4af626;
+    margin-right: 8px; 
+    white-space: nowrap;
+}
+
+.terminal-text {
+    color: #a5b6cf; 
+    text-shadow: 0 0 5px #a5b6cf, 0 0 10px #a5b6cf;
+    word-break: break-all; 
+}
+
+#cmd-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 0;
+    margin: 0;
+
+    font-family: monospace;
+    font-size: inherit;
+    flex-grow: 1; 
+    
+    color: #a5b6cf; 
+    text-shadow: 0 0 5px #a5b6cf, 0 0 10px #a5b6cf;
+    
+    caret-color: #a5b6cf; 
+    caret-shape: block;
+}
+
+.minimise {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 12px;   
+    height: 12px;
+    border-radius: 50%;
+    background-color: #f5bf4f; 
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.minimise::after {
+    content: '';
+    width: 8px;
+    height: 2px;
+    background-color: #4a4a4a; 
+    opacity: 0;
+    transition: opacity 0.1s ease;
+}
+
+.minimise:hover::after {
+    opacity: 1;
+}
+
+.terminal-window.minimised {
+    height: 40px; 
+    width: 40px;
+    overflow: hidden;
+    cursor: pointer; 
+}
+
+.terminal-window.minimised > *:not(.minimise) {
+    display: none;
+}
+
+.terminal-window.minimised .minimise {
+    background-color: #28c840; 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    right: auto; 
+}
+
+.terminal-window.minimised .minimise::after {
+    background-color: transparent; 
+    width: 100%; 
+    height: 100%;
+    opacity: 1;   
+    transition: none;
+}
+
+.terminal-window.minimised .minimise::before,
+.terminal-window.minimised .minimise::after {
+    content: '';
+    position: absolute;
+    background-color: #1a1b26; 
+    width: 50%;
+    height: 50%;
+}
+
+.terminal-window.minimised .minimise::before {
+    top: 2px;
+    left: 2px;
+    clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+
+.terminal-window.minimised .minimise::after {
+    bottom: 2px;
+    right: 2px;
+    /* Creates the opposing diagonal triangle */
+    clip-path: polygon(100% 100%, 100% 0, 0 100%);
+}
+
+#cmd-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: inherit;
+    font-family: inherit;
+    flex-grow: 1;
+}
+
+/* Only show the terminal on screens larger than 1024px */
+@media screen and (max-width: 1024px) {
+    .terminal-window {
+        display: none !important;
+    }
+}
+
 footer {
     margin-top: 60px;
     font-size: 12px;

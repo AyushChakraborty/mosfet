@@ -124,6 +124,15 @@ This will be a space to document all the work I am doing, as well as some cool t
         </ul>
     </section>
 
+    <div class="terminal-window minimised">
+        <div class="minimise"></div>
+        <div id="terminal-output"></div>
+        <div class="input-line">
+            <span class="prompt">visitor@集中:~$</span>
+            <input type="text" id="cmd-input" autocomplete="off" autofocus>
+        </div>
+    </div>
+
     <footer>
         <p>
             Updated: Jan 2026 <br>
@@ -133,6 +142,7 @@ This will be a space to document all the work I am doing, as well as some cool t
     <script src="index.js"></script>
     <script src="config.js"></script>
     <script src="github-heatmap.js"></script>
+    <script src="terminal.js"></script>
     <script>
           document.addEventListener('DOMContentLoaded', () => {
             const heatmap = new GitHubHeatmap('AyushChakraborty', 

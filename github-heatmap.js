@@ -21,7 +21,7 @@ class GitHubHeatmap {
               }
             }
           }
-          repositories(first: 1, orderBy: {field: PUSHED_AT, direction: DESC}, ownerAffiliations: [OWNER], isFork: false) {
+          repositories(first: 1, orderBy: {field: PUSHED_AT, direction: DESC}, ownerAffiliations: [OWNER, ORGANIZATION_MEMBER], isFork: false) {
             nodes {
               owner { login }
               name
