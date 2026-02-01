@@ -78,6 +78,121 @@
     }
 }
 
+/*dynamic island css*/
+#dynamic-island {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #1a1b26; 
+    border-radius: 40px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border: 1px solid #333; 
+    
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+}
+
+.island-hidden {
+    width: 0px;
+    height: 0px;
+    opacity: 0;
+    padding: 0;
+}
+
+.island-active {
+    width: 300px; /* Increased from 200px to fit art + text */
+    height: 60px; /* Increased height for album art */
+    opacity: 1;
+    padding: 0 10px; /* Tighter padding for the "pill" look */
+}
+
+.island-content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    gap: 12px; /* Space between Art, Text, and Visualizer */
+    opacity: 0; 
+    transition: opacity 0.3s ease 0.2s;
+}
+
+.album-art {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px; /* Rounded corners like Apple Music */
+    object-fit: cover;
+    flex-shrink: 0; /* Prevent squishing */
+}
+
+.track-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-grow: 1; /* Takes up all available middle space */
+    overflow: hidden; /* Ensures long text truncates */
+    line-height: 1.2;
+}
+
+.track-title {
+    color: #fff; /* Bright white for title */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; /* Clean sans-serif */
+    font-weight: 600;
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.artist-name {
+    color: #a5b6cf; /* Muted theme color for artist */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.island-active .island-content {
+    opacity: 1;
+}
+
+.visualizer {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 15px;
+    flex-shrink: 0;
+}
+
+.bar {
+    width: 3px;
+    background-color: #4af626; /* Green Glow */
+    border-radius: 2px;
+    animation: bounce 1s infinite ease-in-out;
+}
+
+.bar:nth-child(2) { animation-delay: 0.1s; height: 10px; }
+.bar:nth-child(3) { animation-delay: 0.2s; height: 15px; }
+
+@keyframes bounce {
+    0%, 100% { height: 5px; }
+    50% { height: 15px; }
+}
+
+.track-info {
+    color: #a5b6cf;
+    font-family: monospace;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
 body {
     font-family: 'Courier Prime', 'Courier New', monospace;
     font-size: 15px;
@@ -406,53 +521,49 @@ li.project-item {
     opacity: 1;
 }
 
+/* 1. The Container - Transforms into a Tab */
 .terminal-window.minimised {
-    height: 40px; 
-    width: 40px;
-    overflow: hidden;
-    cursor: pointer; 
+    /* Size & Shape */
+    width: 120px;
+    height: 35px;
+    
+    /* Position: Stick it to the very bottom edge */
+    bottom: 0;
+    right: 40px; /* Keep it aligned with where it was */
+    
+    /* The Trapezoid Shape */
+    /* 15% slant on left, 85% on right, flat bottom */
+    clip-path: polygon(15% 0, 85% 0, 100% 100%, 0% 100%);
+    
+    /* Visuals */
+    background-color: #1a1b26;
+    border-radius: 0; /* Remove the main window curves */
+    cursor: pointer;
+    padding: 0; /* Reset padding */
+    
+    /* Center the text label */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Optional: A top highlight to make it pop like a real tab */
+    border-top: 2px solid #4af626; 
 }
 
-.terminal-window.minimised > *:not(.minimise) {
-    display: none;
+/* 2. The Label (~ term) - Created purely in CSS */
+.terminal-window.minimised::after {
+    content: '~ term';
+    color: #a5b6cf;
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 14px;
+    text-shadow: 0 0 5px #a5b6cf; /* Keep your glow effect */
+    margin-top: 5px; /* Push it down slightly to visually center in the trapezoid */
 }
 
-.terminal-window.minimised .minimise {
-    background-color: #28c840; 
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    right: auto; 
-}
-
-.terminal-window.minimised .minimise::after {
-    background-color: transparent; 
-    width: 100%; 
-    height: 100%;
-    opacity: 1;   
-    transition: none;
-}
-
-.terminal-window.minimised .minimise::before,
-.terminal-window.minimised .minimise::after {
-    content: '';
-    position: absolute;
-    background-color: #1a1b26; 
-    width: 50%;
-    height: 50%;
-}
-
-.terminal-window.minimised .minimise::before {
-    top: 2px;
-    left: 2px;
-    clip-path: polygon(0 0, 100% 0, 0 100%);
-}
-
-.terminal-window.minimised .minimise::after {
-    bottom: 2px;
-    right: 2px;
-    /* Creates the opposing diagonal triangle */
-    clip-path: polygon(100% 100%, 100% 0, 0 100%);
+/* 3. Hide EVERYTHING else inside (Inputs, Minimize Button, etc.) */
+.terminal-window.minimised > * {
+    display: none !important;
 }
 
 /* Only show the terminal on screens larger than 1024px */
